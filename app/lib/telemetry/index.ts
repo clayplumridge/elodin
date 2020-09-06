@@ -1,5 +1,4 @@
 import { inspect } from "util";
-import { createEmitter, EventMap } from "lib/event/emitter";
 
 export const enum TraceLevel {
     Debug = "debug",
@@ -68,21 +67,6 @@ class LoggerImpl implements Logger {
             `[${new Date().toLocaleString()}] [${level}] ${inspect(payload)}`
         );
 
-        logEmitter.emit("trace", {
-            level,
-            area: this.area,
-            action,
-            requestContext: {}, // TODO
-            payload
-        });
+        // TODO: Send to Kusto
     }
 }
-
-interface LoggingEventMap extends EventMap {
-    trace: Trace;
-}
-
-export const logEmitter = createEmitter<LoggingEventMap>();
-logEmitter.on("trace", trace => {
-    // TODO: Impl
-});

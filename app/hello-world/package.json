@@ -12,9 +12,7 @@
     "author": "",
     "dependencies": {
         "dotenv": "^8.2.0",
-        "express": "^4.17.1",
-        "lib/cluster": "link:../lib/cluster",
-        "lib/telemetry": "link:../lib/telemetry"
+        "express": "^4.17.1"
     },
     "devDependencies": {
         "@types/express": "^4.17.6",

@@ -1,6 +1,7 @@
 import express from "express";
 import { createCluster } from "lib/cluster";
 import { requestTime } from "lib/telemetry/util";
+import { getLogger } from "lib/telemetry";
 
 createCluster(initWorker);
 
@@ -11,6 +12,9 @@ async function initWorker() {
     app.use(requestTime);
 
     app.listen(PORT, () => {
-        console.log("server started at http://localhost:" + PORT);
+        getLogger("HelloWorld.Init").info(
+            "Listen",
+            "HelloWorld successfully started"
+        );
     });
 }
