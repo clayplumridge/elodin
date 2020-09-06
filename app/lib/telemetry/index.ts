@@ -52,7 +52,8 @@ const { KUSTO_EVENTHUB_CONNECTION_STRING, KUSTO_EVENTHUB_NAME } = process.env;
 class LoggerImpl implements Logger {
     private static readonly kustoSender = getKustoSender({
         connectionString: KUSTO_EVENTHUB_CONNECTION_STRING!,
-        eventHubName: KUSTO_EVENTHUB_NAME!
+        eventHubName: KUSTO_EVENTHUB_NAME!,
+        batchSize: 1
     }).then(sender => {
         console.log("Successfully acquired Kusto Sender");
         return sender;
