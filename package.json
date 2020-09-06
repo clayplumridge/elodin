@@ -1,0 +1,18 @@
+{
+    "name": "elodin",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "app/**/*"
+    ],
+    "scripts": {
+        "helloworld:build": "yarn workspace hello-world build",
+        "helloworld:start:dev": "yarn workspace hello-world start:dev",
+        "build": "concurrently \"yarn:*:build\"",
+        "start:dev": "concurrently --kill-others-on-fail \"yarn:*:start:dev\"",
+        "test": "concurrently \"yarn:*:test\""
+    },
+    "devDependencies": {
+        "concurrently": "^5.2.0"
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "name": "hello-world",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.ts",
+    "scripts": {
+        "build": "webpack",
+        "run:dev": "cross-env NODE_ENV=development nodemon -r dotenv/config --inspect=5000 dist/index.js",
+        "run:prod": "cross-env NODE_ENV=production node -r dotenv/config dist/index.js",
+        "start:dev": "cross-env NODE_ENV=development webpack --env.run=true"
+    },
+    "author": "",
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "lib/cluster": "link:../lib/cluster",
+        "lib/telemetry": "link:../lib/telemetry"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.6",
+        "cross-env": "^7.0.2",
+        "nodemon": "^2.0.3",
+        "ts-loader": "^6.2.2",
+        "tsconfig-paths-webpack-plugin": "^3.2.0",
+        "typescript": "^3.8.3",
+        "webpack": "^4.42.1",
+        "webpack-cli": "^3.3.11",
+        "webpack-node-externals": "^1.7.2",
+        "webpack-shell-plugin": "^0.5.0"
+    }
+}

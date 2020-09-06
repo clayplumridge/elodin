@@ -1,0 +1,13 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Hello World - Attach",
+            "port": 5000,
+            "skipFiles": ["<node_internals>/**"],
+            "restart": true
+        }
+    ]
+}

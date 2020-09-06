@@ -1,0 +1,4 @@
+{
+    "extends": "../../tsconfig.defaults.json",
+    "references": [{ "path": "../event" }]
+}
