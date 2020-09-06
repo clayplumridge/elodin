@@ -11,23 +11,34 @@ interface KustoSenderConfig {
     batchSize?: number;
 }
 
-export async function getKustoSender(config: KustoSenderConfig) {
-    const batchSize = config.batchSize || 10;
-    const producerClient = new EventHubProducerClient(
-        config.connectionString,
-        config.eventHubName
-    );
+interface KustoSender {
+    send(trace: Trace): Promise<void>;
+}
 
-    let currentBatch = await producerClient.createBatch();
+let kustoSender: KustoSender | undefined;
+export async function getKustoSender(
+    config: KustoSenderConfig
+): Promise<KustoSender> {
+    if (!kustoSender) {
+        const batchSize = config.batchSize || 10;
+        const producerClient = new EventHubProducerClient(
+            config.connectionString,
+            config.eventHubName
+        );
 
-    return {
-        async send(trace: Trace) {
-            currentBatch.tryAdd({ body: trace });
+        let currentBatch = await producerClient.createBatch();
 
-            if (currentBatch.count >= batchSize) {
-                await producerClient.sendBatch(currentBatch);
-                currentBatch = await producerClient.createBatch();
+        kustoSender = {
+            async send(trace: Trace) {
+                currentBatch.tryAdd({ body: trace });
+
+                if (currentBatch.count >= batchSize) {
+                    await producerClient.sendBatch(currentBatch);
+                    currentBatch = await producerClient.createBatch();
+                }
             }
-        }
-    };
+        };
+    }
+
+    return kustoSender;
 }
