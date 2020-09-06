@@ -2,6 +2,7 @@
     "name": "lib-telemetry",
     "version": "1.0.0",
     "dependencies": {
+        "@azure/event-hubs": "^5.2.2",
         "express": "^4.17.1"
     },
     "devDependencies": {

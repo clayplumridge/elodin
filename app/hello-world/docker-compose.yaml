@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+    hello-world:
+        build:
+            context: ../../
+            dockerfile: ./app/hello-world/Dockerfile

@@ -5,7 +5,7 @@
     "main": "index.ts",
     "scripts": {
         "build": "webpack",
-        "run:dev": "cross-env NODE_ENV=development nodemon -r dotenv/config --inspect=5000 dist/index.js",
+        "run:dev": "cross-env NODE_ENV=development node -r dotenv/config --inspect=5000 dist/index.js",
         "run:prod": "cross-env NODE_ENV=production node -r dotenv/config dist/index.js",
         "start:dev": "cross-env NODE_ENV=development webpack --env.run=true"
     },

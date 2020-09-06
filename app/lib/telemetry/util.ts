@@ -12,12 +12,15 @@ export function requestTime(
         const endTime = Date.now();
         const duration = endTime - requestTime;
 
-        getLogger("Express.Request").timing("Timings", {
-            route: req.url,
-            start: new Date(requestTime),
-            end: new Date(endTime),
-            duration
-        });
+        getLogger("Express.Request").timing(
+            {
+                route: req.url,
+                start: new Date(requestTime),
+                end: new Date(endTime),
+                duration
+            },
+            "Timing"
+        );
     });
 
     next();
@@ -26,7 +29,7 @@ export function requestTime(
 export function withTiming<T extends (...args: any[]) => any>(
     func: T,
     area: string,
-    action: string
+    action?: string
 ): (...funcArgs: Parameters<T>) => ReturnType<T> {
     return (...args: Parameters<T>): ReturnType<T> => {
         const start = Date.now();
@@ -34,11 +37,14 @@ export function withTiming<T extends (...args: any[]) => any>(
         const end = Date.now();
         const duration = end - start;
 
-        getLogger(area).timing(action, {
-            start: new Date(start),
-            end: new Date(end),
-            duration
-        });
+        getLogger(area).timing(
+            {
+                start: new Date(start),
+                end: new Date(end),
+                duration
+            },
+            action
+        );
 
         return result;
     };
