@@ -13,8 +13,8 @@ async function initWorker() {
 
     app.listen(PORT, () => {
         getLogger("HelloWorld.Init").info(
-            "Listen",
-            "HelloWorld successfully started"
+            "HelloWorld successfully started",
+            "Listen"
         );
     });
 }
