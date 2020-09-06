@@ -53,6 +53,9 @@ class LoggerImpl implements Logger {
     private static readonly kustoSender = getKustoSender({
         connectionString: KUSTO_EVENTHUB_CONNECTION_STRING!,
         eventHubName: KUSTO_EVENTHUB_NAME!
+    }).then(sender => {
+        console.log("Successfully acquired Kusto Sender");
+        return sender;
     });
     constructor(private readonly area: string) {}
 
@@ -73,13 +76,13 @@ class LoggerImpl implements Logger {
             `[${new Date().toLocaleString()}] [${level}] ${inspect(payload)}`
         );
 
-        LoggerImpl.kustoSender.then(sender =>
+        LoggerImpl.kustoSender.then(sender => {
             sender.send({
                 area: this.area,
                 action: action || "Log",
                 level,
                 payload
-            })
-        );
+            });
+        });
     }
 }
