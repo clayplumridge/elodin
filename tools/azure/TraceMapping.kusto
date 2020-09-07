@@ -1,0 +1,7 @@
+.create table Trace ingestion json mapping "TraceMapping"
+'['
+'   { "column": "Level", "DataType": "string", "Properties": {"Path":"$.level"}},'
+'   { "column": "Area", "DataType": "string", "Properties": {"Path":"$.area"}},'
+'   { "column": "Action", "DataType": "string", "Properties": {"Path":"$.action"}},'
+'   { "column": "Payload", "DataType": "string", "Properties": {"Path":"$.payload"}}'
+']'
