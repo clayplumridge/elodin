@@ -1,5 +1,6 @@
 import { inspect } from "util";
 import { getKustoSender } from "./kusto";
+import * as cluster from "cluster";
 
 export const enum TraceLevel {
     Debug = "debug",
@@ -13,6 +14,8 @@ export interface Trace {
     level: TraceLevel;
     area: string;
     action: string;
+    nodeClusterId: string;
+    timestamp: number;
     payload: any;
 }
 
@@ -53,11 +56,9 @@ class LoggerImpl implements Logger {
     private static readonly kustoSender = getKustoSender({
         connectionString: KUSTO_EVENTHUB_CONNECTION_STRING!,
         eventHubName: KUSTO_EVENTHUB_NAME!,
-        batchSize: 1
-    }).then(sender => {
-        console.log("Successfully acquired Kusto Sender");
-        return sender;
+        batchSize: 1 // TODO: Config value
     });
+
     constructor(private readonly area: string) {}
 
     public debug = (payload: any, action?: string) =>
@@ -72,18 +73,26 @@ class LoggerImpl implements Logger {
         this.trace(TraceLevel.Error, action, payload);
 
     private trace(level: TraceLevel, action: string | undefined, payload: any) {
+        const nodeClusterId = cluster.isMaster
+            ? "main"
+            : `worker-${cluster.worker.id}`;
+
+        action = action || "Log";
+
         // Using inspect instead of JSON.stringify because inspect doesn't throw on circular references, just handles thems
         consoleLogMap[level](
-            `[${new Date().toLocaleString()}] [${level}] ${inspect(payload)}`
+            `[${new Date().toLocaleString()}][${level}][${nodeClusterId}][${
+                this.area
+            }][${action}] ${inspect(payload)}`
         );
 
-        LoggerImpl.kustoSender.then(sender => {
-            sender.send({
-                area: this.area,
-                action: action || "Log",
-                level,
-                payload
-            });
+        LoggerImpl.kustoSender.send({
+            area: this.area,
+            action: action,
+            level,
+            nodeClusterId,
+            timestamp: Date.now(),
+            payload
         });
     }
 }

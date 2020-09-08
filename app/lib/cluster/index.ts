@@ -1,12 +1,15 @@
 import cluster from "cluster";
 import os from "os";
+import { getLogger } from "lib/telemetry";
 
 export function createCluster(
     initWorker: () => Promise<void>,
     workers?: number
 ): Promise<void> | undefined {
+    const logger = getLogger("SDK.Cluster");
+
     if (cluster.isMaster) {
-        console.log(`Master process ${process.pid} started`);
+        logger.info(`Main process ${process.pid} started`);
 
         workers = workers || os.cpus().length;
         for (let i = 0; i < workers; i++) {
@@ -14,12 +17,12 @@ export function createCluster(
         }
 
         cluster.on("exit", worker => {
-            console.log(`Worker ${worker.id} died; replacing`);
+            logger.info(`Worker ${worker.id} died; replacing`);
             cluster.fork();
         });
     } else {
         return initWorker().then(x =>
-            console.log(`Successfully started worker ${cluster.worker.id}`)
+            logger.info(`Successfully started worker ${cluster.worker.id}`)
         );
     }
 }

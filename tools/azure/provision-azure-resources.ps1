@@ -22,7 +22,7 @@ $eventHubResult = az eventhubs eventhub create --resource-group $resourceGroup -
 $eventHubId = $eventHubResult.id
 
 $authorizationRule = az eventhubs eventhub authorization-rule create --resource-group $resourceGroup --namespace-name $namespace --eventhub-name $computerName --name "admin" --rights Manage Send Listen | ConvertFrom-Json
-$authorizationKeys = az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $namespace --eventhub-name $computerName --name "admin"
+$authorizationKeys = az eventhubs eventhub authorization-rule keys list --resource-group $resourceGroup --namespace-name $namespace --eventhub-name $computerName --name "admin" | ConvertFrom-Json
 Write-Host "$authorizationKeys" # TODO: Create environment file
 
 # Link event hub to kusto

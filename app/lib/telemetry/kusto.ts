@@ -1,4 +1,4 @@
-import { EventHubProducerClient } from "@azure/event-hubs";
+import { EventHubProducerClient, EventDataBatch } from "@azure/event-hubs";
 import { Trace } from ".";
 
 interface KustoSenderConfig {
@@ -11,34 +11,36 @@ interface KustoSenderConfig {
     batchSize?: number;
 }
 
-interface KustoSender {
-    send(trace: Trace): Promise<void>;
-}
-
 let kustoSender: KustoSender | undefined;
-export async function getKustoSender(
-    config: KustoSenderConfig
-): Promise<KustoSender> {
+export function getKustoSender(config: KustoSenderConfig): KustoSender {
     if (!kustoSender) {
-        const batchSize = config.batchSize || 10;
-        const producerClient = new EventHubProducerClient(
-            config.connectionString,
-            config.eventHubName
-        );
-
-        let currentBatch = await producerClient.createBatch();
-
-        kustoSender = {
-            async send(trace: Trace) {
-                currentBatch.tryAdd({ body: trace });
-
-                if (currentBatch.count >= batchSize) {
-                    await producerClient.sendBatch(currentBatch);
-                    currentBatch = await producerClient.createBatch();
-                }
-            }
-        };
+        kustoSender = new KustoSender(config);
     }
 
     return kustoSender;
+}
+
+class KustoSender {
+    private currentBatch: EventDataBatch | undefined = undefined;
+    private readonly producerClient: EventHubProducerClient;
+
+    constructor(private readonly config: KustoSenderConfig) {
+        this.producerClient = new EventHubProducerClient(
+            config.connectionString,
+            config.eventHubName
+        );
+    }
+
+    public async send(trace: Trace): Promise<void> {
+        if (!this.currentBatch) {
+            this.currentBatch = await this.producerClient.createBatch();
+        }
+
+        this.currentBatch.tryAdd({ body: trace });
+
+        if (this.currentBatch.count >= (this.config.batchSize || 10)) {
+            await this.producerClient.sendBatch(this.currentBatch);
+            this.currentBatch = await this.producerClient.createBatch();
+        }
+    }
 }
