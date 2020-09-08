@@ -73,6 +73,7 @@ class LoggerImpl implements Logger {
         this.trace(TraceLevel.Error, action, payload);
 
     private trace(level: TraceLevel, action: string | undefined, payload: any) {
+        const timestamp = Date.now();
         const nodeClusterId = cluster.isMaster
             ? "main"
             : `worker-${cluster.worker.id}`;
@@ -81,7 +82,9 @@ class LoggerImpl implements Logger {
 
         // Using inspect instead of JSON.stringify because inspect doesn't throw on circular references, just handles thems
         consoleLogMap[level](
-            `[${new Date().toLocaleString()}][${level}][${nodeClusterId}][${
+            `[${new Date(
+                timestamp
+            ).toLocaleString()}][${level}][${nodeClusterId}][${
                 this.area
             }][${action}] ${inspect(payload)}`
         );
@@ -91,7 +94,7 @@ class LoggerImpl implements Logger {
             action: action,
             level,
             nodeClusterId,
-            timestamp: Date.now(),
+            timestamp,
             payload
         });
     }
