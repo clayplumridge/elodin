@@ -1,3 +1,4 @@
 {
-    "extends": "../../tsconfig.defaults.json"
+    "extends": "../../tsconfig.defaults.json",
+    "references": [{ "path": "../circuit-breaker" }]
 }
