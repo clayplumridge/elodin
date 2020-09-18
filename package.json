@@ -14,6 +14,7 @@
         "azure:provision": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./tools/azure/provision-azure-resources.ps1"
     },
     "devDependencies": {
-        "concurrently": "^5.2.0"
+        "concurrently": "^5.2.0",
+        "typescript": "^4.0.0"
     }
 }
