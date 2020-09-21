@@ -1,4 +1,4 @@
 {
     "extends": "../tsconfig.defaults.json",
-    "references": [{ "path": "../lib/cluster" }, { "path": "../lib/telemetry" }]
+    "references": [{ "path": "../lib" }]
 }

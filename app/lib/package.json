@@ -1,8 +1,9 @@
 {
-    "name": "lib-telemetry",
+    "name": "elodin",
     "version": "1.0.0",
     "dependencies": {
         "@azure/event-hubs": "^5.2.2",
+        "axios": "^0.20.0",
         "express": "^4.17.1"
     },
     "devDependencies": {
