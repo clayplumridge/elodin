@@ -5,7 +5,7 @@ export interface CircuitBreakerConfig<T> {
     successThreshold: number;
     timeoutInMs: number;
 
-    validateResult: (result: T) => boolean;
+    validateResult?: (result: T) => boolean;
     onBreakerStateChange?: (state: BreakerState) => void;
 }
 
@@ -20,7 +20,7 @@ type Unwrap<T> = T extends Promise<infer U> ? U : T;
 export function withCircuitBreaker<T extends (...args: any[]) => Promise<any>>(
     func: T,
     config: CircuitBreakerConfig<Unwrap<ReturnType<T>>>
-): (...funcArgs: Parameters<T>) => Promise<any> {
+): (...funcArgs: Parameters<T>) => Promise<Unwrap<ReturnType<T>>> {
     let successCount = 0;
     let failureCount = 0;
     let breakerState = BreakerState.GREEN;
@@ -45,6 +45,7 @@ export function withCircuitBreaker<T extends (...args: any[]) => Promise<any>>(
             breakerState = BreakerState.RED;
             config.onBreakerStateChange?.(breakerState);
             nextAttempt = Date.now() + config.timeoutInMs;
+            successCount = 0;
         }
     }
 
@@ -66,7 +67,7 @@ export function withCircuitBreaker<T extends (...args: any[]) => Promise<any>>(
     return async (...args: Parameters<T>) => {
         const response = await exec(...args);
 
-        if (config.validateResult(response)) {
+        if (!config.validateResult || config.validateResult(response)) {
             onSuccess();
         } else {
             onFailure();
