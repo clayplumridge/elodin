@@ -80,7 +80,7 @@ class LoggerImpl implements Logger {
 
         action = action || "Log";
 
-        // Using inspect instead of JSON.stringify because inspect doesn't throw on circular references, just handles thems
+        // Using inspect instead of JSON.stringify because inspect doesn't throw on circular references, just handles them
         consoleLogMap[level](
             `[${new Date(
                 timestamp
