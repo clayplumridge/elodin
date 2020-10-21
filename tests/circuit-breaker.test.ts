@@ -55,4 +55,8 @@ describe("Circuit breaker", () => {
             "Did not call CalledStateChange, or did not call it with the correct value"
         );
     });
+
+    it("Testing actions build", () => {
+        assert(false);
+    });
 });
