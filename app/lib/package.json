@@ -1,5 +1,5 @@
 {
-    "name": "elodin",
+    "name": "elodin-lib",
     "version": "1.0.0",
     "dependencies": {
         "@azure/event-hubs": "^5.2.2",

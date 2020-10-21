@@ -10,11 +10,16 @@
         "helloworld:start:dev": "yarn workspace hello-world start:dev",
         "build": "concurrently \"yarn:*:build\"",
         "start:dev": "concurrently --kill-others-on-fail \"yarn:*:start:dev\"",
-        "test": "concurrently \"yarn:*:test\"",
+        "test": "ts-mocha --paths -p tests/tsconfig.json tests/**/*.test.ts",
         "azure:provision": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./tools/azure/provision-azure-resources.ps1"
     },
     "devDependencies": {
+        "@types/chai": "^4.2.14",
+        "@types/mocha": "^8.0.3",
+        "chai": "^4.2.0",
         "concurrently": "^5.2.0",
+        "mocha": "^8.2.0",
+        "ts-mocha": "^7.0.0",
         "typescript": "^4.0.0"
     }
 }

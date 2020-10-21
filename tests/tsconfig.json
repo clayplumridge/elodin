@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "composite": true,
+        "incremental": true,
+        "declaration": true,
+        "target": "es2018",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "../dist",
+        "sourceMap": false,
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "rootDir": ".",
+        "baseUrl": ".",
+        "lib": ["ES2016", "DOM"],
+        "paths": {
+            "lib/*": ["../app/lib/*"]
+        }
+    },
+
+    "include": ["**/*.ts"],
+    "references": [{ "path": "../app/lib" }]
+}
