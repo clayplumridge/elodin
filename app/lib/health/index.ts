@@ -26,7 +26,7 @@ export function withHealthEndpoint(
     app: Express,
     healthEvaluation: () => ServiceHealth
 ) {
-    const logger = getLogger("Elodin.Health");
+    const logger = getLogger("SDK.Health");
 
     app.get("/_health", (req, res) => {
         const health = healthEvaluation();
